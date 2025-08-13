@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TIDWIT | Ecosystem Value Calculator</title>
+  <style>
+    :root{
+      /* ===== TIDWIT BRAND (adjust if you have exact hex codes) ===== */
+      /* If you have the exact palette, paste below. These are tasteful defaults. */
+      --brand-bg: #0a1220;          /* dark background */
+      --brand-card: #111a2b;        /* card surface */
+      --brand-accent: #2aa2ff;      /* primary accent (blue) */
+      --brand-accent-2:#44e2a6;     /* secondary accent (green) */
+      --brand-text: #eef4ff;        /* text on dark */
+      --brand-muted: #97a9cc;       /* muted text */
+      --brand-danger:#ff5a5f;       /* error */
+
+      --radius: 16px;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    html,body{margin:0;background:linear-gradient(180deg,var(--brand-bg),#0d1830 40%, var(--brand-bg));color:var(--brand-text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
+    .wrap{max-width:1080px;margin:24px auto;padding:16px}
+    header{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+    header img{height:36px;width:auto}
+    header h1{font-size:1.15rem;margin:0;color:var(--brand-muted);font-weight:700;letter-spacing:.2px}
+    .grid{display:grid;grid-template-columns:1fr;gap:16px}
+    @media (max-width:900px){.grid{grid-template-columns:1fr}}
+    .card{background:var(--brand-card);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .card .pad{padding:18px}
+    .title{display:flex;align-items:center;justify-content:space-between;margin:0 0 8px}
+    .title span{font-size:.9rem;color:var(--brand-muted)}
+    .muted{color:var(--brand-muted);font-size:.85rem}
+    .inputs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+    @media (max-width:700px){.inputs{grid-template-columns:1fr}}
+    label{display:block;font-size:.85rem;margin:0 0 6px;color:var(--brand-muted)}
+    input,select{
+      width:100%;padding:12px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.08);
+      background:#0c1628;color:var(--brand-text);outline:none;font-size:.95rem
+    }
+    input:focus{border-color:var(--brand-accent);box-shadow:0 0 0 3px rgba(58,160,255,.15)}
+    .hint{font-size:.8rem;color:var(--brand-muted);margin-top:4px}
+    .cta{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+    .btn{background:linear-gradient(135deg,var(--brand-accent),#66c4ff);color:#06101f;border:none;padding:12px 16px;border-radius:12px;font-weight:800;cursor:pointer}
+    .btn.secondary{background:#0c1628;color:var(--brand-text);border:1px solid rgba(255,255,255,.12)}
+    .btn:disabled{opacity:.5;cursor:not-allowed}
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+    @media (max-width:1000px){.kpis{grid-template-columns:repeat(2,1fr)}}
+    .kpi{background:#0c1628;border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:14px}
+    .kpi h3{margin:0;font-size:.85rem;color:var(--brand-muted);font-weight:700}
+    .kpi .num{font-size:1.4rem;margin-top:6px;font-weight:900}
+    .delta{margin-top:6px;font-size:.8rem}
+    .delta.good{color:var(--brand-accent-2)}
+    .delta.bad{color:var(--brand-danger)}
+    .pair{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:center}
+    .vs{color:var(--brand-muted);font-size:.8rem}
+    .hr{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);margin:12px 0}
+    .footnote{margin-top:8px;font-size:.75rem;color:var(--brand-muted)}
+    .consent{display:flex;gap:8px;align-items:flex-start;margin-top:10px}
+    .consent input{width:auto}
+    .tag{display:inline-block;border:1px solid rgba(255,255,255,.12);padding:.25rem .5rem;border-radius:999px;font-size:.75rem;margin-right:.35rem;color:var(--brand-muted)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <img id="logo" alt="TIDWIT" />
+      <h1>Ecosystem Value Calculator</h1>
+    </header>
+
+    <div class="grid">
+      <!-- Left: Form -->
+      <section class="card">
+        <div class="pad">
+          <div class="title">
+            <h2 style="margin:0;font-size:1rem">Tell us about your current state</h2>
+            <span>All fields required</span>
+          </div>
+
+          <div class="inputs">
+            <div>
+              <label for="partners">Active partners (count)</label>
+              <input id="partners" type="number" inputmode="numeric" min="0" step="1" placeholder="e.g., 50" required>
+              <div class="hint">How many partners are currently active?</div>
+            </div>
+
+            <div>
+              <label for="ttm">Time to market (in weeks)</label>
+              <input id="ttm" type="number" inputmode="decimal" min="0" step="0.1" placeholder="e.g., 12" required>
+              <div class="hint">Typical time from idea to launch.</div>
+            </div>
+
+            <div>
+              <label for="tcpu">Training cost per user (USD)</label>
+              <input id="tcpu" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 250" required>
+              <div class="hint">Average cost to fully enable a user.</div>
+            </div>
+
+            <div>
+              <label for="ratio">Enablement staff-to-partners ratio</label>
+              <input id="ratio" type="text" placeholder="e.g., 1:10 or 0.1" required>
+              <div class="hint">Enter like <b>1:10</b> (1 staff per 10 partners) or decimal (staff ÷ partners).</div>
+            </div>
+          </div>
+
+          <div class="cta">
+            <button class="btn" id="calcBtn" type="button">Calculate Impact</button>
+            <button class="btn secondary" id="resetBtn" type="button">Reset</button>
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="inputs">
+            <div>
+              <label for="name">Name</label>
+              <input id="name" type="text" placeholder="Your name">
+            </div>
+            <div>
+              <label for="email">Work email</label>
+              <input id="email" type="email" placeholder="you@company.com">
+            </div>
+          </div>
+          <div class="inputs">
+            <div>
+              <label for="company">Company</label>
+              <input id="company" type="text" placeholder="Company Inc.">
+            </div>
+            <div>
+              <label for="role">Role</label>
+              <input id="role" type="text" placeholder="e.g., Partner Ops Lead">
+            </div>
+          </div>
+
+          <div class="consent">
+            <input id="consent" type="checkbox">
+            <label for="consent" class="muted">I agree to be contacted by TIDWIT about this inquiry and related services.</label>
+          </div>
+
+          <div class="cta">
+            <button class="btn" id="ctaBtn" type="button">Schedule a demo</button>
+            <span class="muted" id="ctaMsg"></span>
+          </div>
+
+          <p class="footnote">
+            Assumptions: <span class="tag">4× partners</span> <span class="tag">6× faster TTM</span> <span class="tag">4× lower training cost</span> <span class="tag">50% fewer enablement staff per partner</span>
+          </p>
+        </div>
+      </section>
+
+      <!-- Right: Results -->
+      <section class="card">
+        <div class="pad">
+          <div class="title">
+            <h2 style="margin:0;font-size:1rem">Your projected impact with TIDWIT</h2>
+            <span>Instant preview</span>
+          </div>
+
+          <div class="kpis" id="kpis"></div>
+          <div class="hr"></div>
+          <div id="explain" class="muted">
+            Enter your current metrics and click <b>Calculate Impact</b> to see projections.
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    // ======== BRANDING ========
+    const logoSrc = "./unnamed.jpg"; // replaced with attached logo; ensure this file is hosted alongside the HTML
+    document.getElementById("logo").src = logoSrc;
+
+    // ======== HELPERS ========
+    const $ = (id) => document.getElementById(id);
+    const fmtInt = (n)=> isFinite(n)? Math.round(n).toLocaleString(): "—";
+    const fmtMoney = (n)=> isFinite(n)? "$" + Number(n).toFixed(2).toLocaleString(): "—";
+    const fmtWeeks = (w)=> isFinite(w)? (w<1? (w*7).toFixed(0)+" days" : Number(w).toFixed(1)+" wks") : "—";
+
+    function parseRatio(input){
+      const s = (input||"").trim();
+      if(!s) return NaN;
+      if(s.includes(":")){
+        const [a,b] = s.split(":").map(Number);
+        if(!isFinite(a) || !isFinite(b) || b<=0) return NaN;
+        return a/b; // staff per partner
+      } else {
+        const v = Number(s);
+        return isFinite(v) ? v : NaN; // already staff-per-partner
+      }
+    }
+    function ratioToString(spp){
+      if(!isFinite(spp) || spp<=0) return "—";
+      const partnersPerStaff = 1 / spp;
+      const denom = Math.max(1, Math.round(partnersPerStaff));
+      return `1:${denom.toLocaleString()}`;
+    }
+
+    function calculate(){
+      const partners = Number($("partners").value);
+      const ttmWeeks = Number($("ttm").value);
+      const training = Number($("tcpu").value);
+      const spp = parseRatio($("ratio").value);
+      const ok = [partners, ttmWeeks, training, spp].every(v => isFinite(v) && v>=0);
+      if(!ok){ 
+        $("explain").innerHTML = "Please complete all fields with valid numbers. For ratio, use <b>1:10</b> or a decimal (e.g., <b>0.1</b>).";
+        $("kpis").innerHTML = "";
+        return;
+      }
+
+      // Assumptions
+      const partnersProjected = partners * 4; 
+      const ttmProjected = ttmWeeks / 6; 
+      const trainingProjected = training / 4; 
+      const sppProjected = spp * 0.5; 
+
+      // Deltas (% change)
+      const partnersDelta = (partnersProjected/Math.max(1,partners) - 1) * 100;
+      const ttmDelta = (1 - (ttmProjected/Math.max(0.0001, ttmWeeks))) * 100;
+      const trainingDelta = (1 - (trainingProjected/Math.max(0.01, training))) * 100;
+      const sppDelta = (1 - (sppProjected/Math.max(0.0001, spp))) * 100;
+
+      const kpis = [
+        { label:"Active Partners", current: fmtInt(partners), projected: fmtInt(partnersProjected), delta: `+${partnersDelta.toFixed(0)}%`, good:true },
+        { label:"Time to Market", current: fmtWeeks(ttmWeeks), projected: fmtWeeks(ttmProjected), delta: `-${ttmDelta.toFixed(0)}%`, good:true },
+        { label:"Training Cost / User", current: fmtMoney(training), projected: fmtMoney(trainingProjected), delta: `-${trainingDelta.toFixed(0)}%`, good:true },
+        { label:"Enablement Staff : Partners", current: ratioToString(spp), projected: ratioToString(sppProjected), delta: `-${sppDelta.toFixed(0)}%`, good:true }
+      ];
+
+      $("kpis").innerHTML = kpis.map(k => `
+        <div class=\"kpi\">
+          <h3>${k.label}</h3>
+          <div class=\"pair\">
+            <div>
+              <div class=\"muted\">Current</div>
+              <div class=\"num\">${k.current}</div>
+            </div>
+            <div class=\"vs\">→</div>
+            <div>
+              <div class=\"muted\">With TIDWIT</div>
+              <div class=\"num\">${k.projected}</div>
+            </div>
+          </div>
+          <div class=\"delta ${k.good?'good':'bad'}\">${k.delta}</div>
+        </div>
+      `).join("");
+
+      $("explain").innerHTML =
+        `Projections apply your inputs using TIDWIT efficiencies: <b>4× partners</b>, <b>6× faster</b>, <b>4× lower training cost</b>, and <b>50% less</b> enablement staff per partner.`;
+
+      return { partners, ttmWeeks, training, spp, partnersProjected, ttmProjected, trainingProjected, sppProjected };
+    }
+
+    // Auto-calc on change
+    ["partners","ttm","tcpu","ratio"].forEach(id => $(id).addEventListener("change", calculate));
+    $("calcBtn").addEventListener("click", calculate);
+    $("resetBtn").addEventListener("click", () => {
+      ["partners","ttm","tcpu","ratio","name","email","company","role"].forEach(id => $(id).value = "");
+      $("consent").checked = false;
+      $("kpis").innerHTML = "";
+      $("explain").innerHTML = 'Enter your current metrics and click <b>Calculate Impact</b> to see projections.';
+      $("ctaMsg").textContent = "";
+    });
+
+    // ======== LEAD SUBMIT (HubSpot / Marketo / Salesforce Web-to-Lead / Webhook) ========
+    const INTEGRATION = {
+      mode: "hubspot", // "hubspot" | "marketo" | "salesforce" | "webhook"
+
+      // --- HubSpot ---
+      hubspot: {
+        portalId: "YOUR_PORTAL_ID",
+        formGuid: "YOUR_FORM_GUID",
+        endpoint: (portalId, formGuid) => `https://api.hsforms.com/submissions/v3/integration/submit/${portalId}/${formGuid}`,
+      },
+
+      // --- Marketo --- (recommended: send to your server, then to Marketo REST)
+      marketo: {
+        // Example webhook endpoint on your server
+        endpoint: "/api/marketo/lead", // POST from your server to Marketo REST API
+      },
+
+      // --- Salesforce Web-to-Lead ---
+      salesforce: {
+        orgId: "YOUR_SFDC_ORG_ID", // 15/18 char
+        endpoint: "https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8",
+      },
+
+      // --- Generic webhook (Zapier/Make/etc.) ---
+      webhook: {
+        endpoint: "/api/lead", // replace with your webhook URL
+      }
+    };
+
+    // Capture UTM params
+    function parseUTM(){
+      const p = new URLSearchParams(location.search);
+      const keys = ["utm_source","utm_medium","utm_campaign","utm_term","utm_content"];
+      const out = {};
+      keys.forEach(k=>{ const v=p.get(k); if(v) out[k]=v; });
+      return out;
+    }
+
+    async function submitLead(){
+      const calc = calculate();
+      const email = $("email").value.trim();
+      const name = $("name").value.trim();
+      const company = $("company").value.trim();
+      const role = $("role").value.trim();
+      const consent = $("consent").checked;
+
+      if(!email){ $("ctaMsg").textContent = "Please add your email so we can reach out."; return; }
+      if(!consent){ $("ctaMsg").textContent = "Please check consent so we can contact you."; return; }
+
+      const payload = {
+        email, name, company, role, consent,
+        ...calc,
+        utm: parseUTM(),
+        page: location.href,
+        ts: new Date().toISOString()
+      };
+
+      $("ctaBtn").disabled = true; $("ctaMsg").textContent = "Submitting...";
+
+      try{
+        if(INTEGRATION.mode === "hubspot"){
+          // Direct HubSpot submissions may be blocked by CORS in the browser.
+          // Best practice: proxy via your server. This client-side call works if CORS is allowed.
+          const { portalId, formGuid, endpoint } = INTEGRATION.hubspot;
+          const res = await fetch(endpoint(portalId, formGuid), {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              fields: [
+                { name: "email", value: email },
+                { name: "firstname", value: name.split(" ")[0] || "" },
+                { name: "lastname", value: name.split(" ").slice(1).join(" ") || "" },
+                { name: "company", value: company },
+                { name: "jobtitle", value: role },
+                // Custom fields (create in HubSpot):
+                { name: "current_active_partners__c", value: String(calc.partners) },
+                { name: "current_ttm_weeks__c", value: String(calc.ttmWeeks) },
+                { name: "training_cost_per_user__c", value: String(calc.training) },
+                { name: "staff_per_partner_ratio__c", value: String(calc.spp) },
+                { name: "proj_partners__c", value: String(calc.partnersProjected) },
+                { name: "proj_ttm_weeks__c", value: String(calc.ttmProjected) },
+                { name: "proj_training_cost__c", value: String(calc.trainingProjected) },
+                { name: "proj_staff_per_partner_ratio__c", value: String(calc.sppProjected) }
+              ],
+              context: {
+                pageUri: location.href,
+                pageName: document.title,
+                hutk: (document.cookie.match(/hubspotutk=([^;]+)/)||[])[1] || undefined
+              },
+              legalConsentOptions: { consent: { consentToProcess: true, text: "User consented via calculator form.", communications: [{ value: true, subscriptionTypeId: 999, text: "Product & Services" }] } }
+            })
+          });
+          if(!res.ok) throw new Error("HubSpot submit failed");
+        }
+        else if(INTEGRATION.mode === "marketo"){
+          const res = await fetch(INTEGRATION.marketo.endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+          if(!res.ok) throw new Error("Marketo proxy failed");
+        }
+        else if(INTEGRATION.mode === "salesforce"){
+          // Salesforce Web-to-Lead requires form POST (x-www-form-urlencoded)
+          const form = new FormData();
+          form.append("oid", INTEGRATION.salesforce.orgId);
+          form.append("retURL", location.href);
+          form.append("email", email);
+          form.append("first_name", name.split(" ")[0] || "");
+          form.append("last_name", name.split(" ").slice(1).join(" ") || "");
+          form.append("company", company || "");
+          form.append("title", role || "");
+          // custom fields (create in SFDC): 00N... ids must be updated
+          form.append("00N_current_active_partners__c", String(calc.partners));
+          form.append("00N_current_ttm_weeks__c", String(calc.ttmWeeks));
+          form.append("00N_training_cost_per_user__c", String(calc.training));
+          form.append("00N_staff_per_partner_ratio__c", String(calc.spp));
+          form.append("00N_proj_partners__c", String(calc.partnersProjected));
+          form.append("00N_proj_ttm_weeks__c", String(calc.ttmProjected));
+          form.append("00N_proj_training_cost__c", String(calc.trainingProjected));
+          form.append("00N_proj_staff_per_partner_ratio__c", String(calc.sppProjected));
+
+          await fetch(INTEGRATION.salesforce.endpoint, { method: "POST", body: form, mode: "no-cors" });
+        }
+        else if(INTEGRATION.mode === "webhook"){
+          const res = await fetch(INTEGRATION.webhook.endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+          if(!res.ok) throw new Error("Webhook failed");
+        }
+
+        $("ctaMsg").textContent = `Thanks${name?`, ${name}`:""}! We’ll follow up shortly.`;
+      } catch(err){
+        console.error(err);
+        $("ctaMsg").textContent = "Couldn't submit from the browser. We'll follow up — or connect this button to your server webhook.";
+      } finally {
+        $("ctaBtn").disabled = false;
+      }
+    }
+
+    $("ctaBtn").addEventListener("click", submitLead);
+  </script>
+</body>
+</html>
