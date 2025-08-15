@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title> TIDWIT | Ecosystem Value</title>
+  <title>TIDWIT | Ecosystem Value</title>
   <style>
     :root{
       --brand-bg: #0a1220;
@@ -19,7 +19,7 @@
     html,body{margin:0;background:linear-gradient(180deg,var(--brand-bg),#0d1830 40%, var(--brand-bg));color:var(--brand-text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
     .wrap{max-width:1080px;margin:24px auto;padding:16px}
     header{display:flex;align-items:center;gap:14px;margin-bottom:18px}
-    header img{height:36px;width:auto}
+    /* remove gap if no logo present */
     header h1{font-size:1.15rem;margin:0;color:var(--brand-muted);font-weight:700;letter-spacing:.2px}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
     @media (max-width:900px){.grid{grid-template-columns:1fr}}
@@ -66,8 +66,8 @@
 <body>
   <div class="wrap">
     <header>
-      <img id="logo" alt="TIDWIT" />
-      <h1>Ecosystem Value Calculator</h1>
+      <!-- logo removed -->
+      <h1>TIDWIT Ecosystem Value Calculator</h1>
     </header>
 
     <div class="grid">
@@ -120,8 +120,7 @@
   </div>
 
   <script>
-    const logoSrc = "https://www.tidwit.com/wp-content/uploads/2023/07/TIDWIT-Logo-White.svg";
-    document.getElementById("logo").src = logoSrc;
+    // removed logo JS
     const $ = (id) => document.getElementById(id);
     const fmtInt = (n)=> isFinite(n)? Math.round(n).toLocaleString(): "—";
     const fmtMoney = (n)=> isFinite(n)? "$" + Number(n).toFixed(2): "—";
