@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TIDWIT | Ecosystem Value</title>
+  <style>
+    :root{
+      --brand-bg: #0a1220;
+      --brand-card: #111a2b;
+      --brand-accent: #2aa2ff;
+      --brand-accent-2:#44e2a6;
+      --brand-text: #eef4ff;
+      --brand-muted: #97a9cc;
+      --brand-danger:#ff5a5f;
+      --radius: 12px;
+      --shadow: 0 6px 16px rgba(0,0,0,.25);
+    }
+    html,body{margin:0;background:linear-gradient(180deg,var(--brand-bg),#0d1830 40%, var(--brand-bg));color:var(--brand-text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
+    .wrap{max-width:1080px;margin:24px auto;padding:16px}
+    header{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+    header img{height:36px;width:auto}
+    header h1{font-size:1.15rem;margin:0;color:var(--brand-muted);font-weight:700;letter-spacing:.2px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    @media (max-width:900px){.grid{grid-template-columns:1fr}}
+    .card{background:var(--brand-card);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .card .pad{padding:18px}
+    .title{display:flex;align-items:center;justify-content:space-between;margin:0 0 8px}
+    .title span{font-size:.85rem;color:var(--brand-muted)}
+    .muted{color:var(--brand-muted);font-size:.8rem}
+    .inputs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+    @media (max-width:700px){.inputs{grid-template-columns:1fr}}
+    label{display:block;font-size:.8rem;margin:0 0 3px;color:var(--brand-muted)}
+    /* Smaller/narrower input boxes */
+    input,select{
+      width:70%;
+      max-width:200px;
+      display:block;
+      margin:0;
+      padding:6px 8px;
+      border-radius:6px;
+      border:1px solid rgba(255,255,255,.08);
+      background:#0c1628;color:var(--brand-text);
+      outline:none;font-size:.85rem
+    }
+    /* On mobile, allow full width for usability */
+    @media (max-width:700px){
+      input,select{width:100%;max-width:100%;}
+    }
+    input:focus{border-color:var(--brand-accent);box-shadow:0 0 0 1px rgba(58,160,255,.15)}
+    .cta{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
+    .btn{background:linear-gradient(135deg,var(--brand-accent),#66c4ff);color:#06101f;border:none;padding:8px 10px;border-radius:6px;font-weight:700;cursor:pointer;font-size:.85rem}
+    .btn.secondary{background:#0c1628;color:var(--brand-text);border:1px solid rgba(255,255,255,.12)}
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+    @media (max-width:1000px){.kpis{grid-template-columns:repeat(2,1fr)}}
+    .kpi{background:#0c1628;border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:8px}
+    .kpi h3{margin:0;font-size:.75rem;color:var(--brand-muted);font-weight:700}
+    .kpi .num{font-size:1.1rem;margin-top:3px;font-weight:800}
+    .delta{margin-top:3px;font-size:.7rem}
+    .delta.good{color:var(--brand-accent-2)}
+    .pair{display:grid;grid-template-columns:1fr auto 1fr;gap:3px;align-items:center}
+    .vs{color:var(--brand-muted);font-size:.7rem}
+    .hr{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);margin:8px 0}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <img id="logo" alt="TIDWIT" />
+      <h1>Ecosystem Value Calculator</h1>
+    </header>
+
+    <div class="grid">
+      <section class="card">
+        <div class="pad">
+          <div class="title">
+            <h2 style="margin:0;font-size:.95rem">Tell us about your current state</h2>
+            <span>All fields required</span>
+          </div>
+
+          <div class="inputs">
+            <div>
+              <label for="partners">Active partners (count)</label>
+              <input id="partners" type="number" placeholder="e.g., 50" required>
+            </div>
+            <div>
+              <label for="ttm">Time to market (in weeks)</label>
+              <input id="ttm" type="number" placeholder="e.g., 12" required>
+            </div>
+            <div>
+              <label for="tcpu">Engagement cost per user (USD)</label>
+              <input id="tcpu" type="number" placeholder="e.g., 250" required>
+            </div>
+            <div>
+              <label for="ratio">Enablement staff-to-partners ratio</label>
+              <input id="ratio" type="text" placeholder="e.g., 1:10 or 0.1" required>
+            </div>
+          </div>
+
+          <div class="cta">
+            <button class="btn" id="calcBtn" type="button">Calculate Impact</button>
+            <button class="btn secondary" id="resetBtn" type="button">Reset</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="pad">
+          <div class="title">
+            <h2 style="margin:0;font-size:.95rem">Your projected impact with TIDWIT</h2>
+            <span>Instant preview</span>
+          </div>
+
+          <div class="kpis" id="kpis"></div>
+          <div class="hr"></div>
+          <div id="explain" class="muted">Enter your current metrics and click <b>Calculate Impact</b> to see projections.</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const logoSrc = "https://www.tidwit.com/wp-content/uploads/2023/07/TIDWIT-Logo-White.svg";
+    document.getElementById("logo").src = logoSrc;
+    const $ = (id) => document.getElementById(id);
+    const fmtInt = (n)=> isFinite(n)? Math.round(n).toLocaleString(): "—";
+    const fmtMoney = (n)=> isFinite(n)? "$" + Number(n).toFixed(2): "—";
+    const fmtWeeks = (w)=> isFinite(w)? (w<1? (w*7).toFixed(0)+" days" : Number(w).toFixed(1)+" wks") : "—";
+
+    function parseRatio(input){
+      if(!input) return NaN;
+      if(input.includes(":")){
+        const [a,b] = input.split(":").map(Number);
+        return a/b;
+      }
+      return Number(input);
+    }
+
+    function ratioToString(spp){
+      if(!isFinite(spp) || spp<=0) return "—";
+      const denom = Math.max(1, Math.round(1 / spp));
+      return `1:${denom}`;
+    }
+
+    function calculate(){
+      const partners = Number($("partners").value);
+      const ttmWeeks = Number($("ttm").value);
+      const training = Number($("tcpu").value);
+      const spp = parseRatio($("ratio").value);
+      const ok = [partners, ttmWeeks, training, spp].every(v => isFinite(v) && v>=0);
+      if(!ok){
+        $("explain").innerHTML = "Please complete all fields with valid numbers.";
+        $("kpis").innerHTML = "";
+        return;
+      }
+      const partnersProjected = partners * 4;
+      const ttmProjected = ttmWeeks / 6;
+      const trainingProjected = training / 4;
+      const sppProjected = spp * 0.5;
+      const partnersDelta = (partnersProjected/partners - 1) * 100;
+      const ttmDelta = (1 - (ttmProjected/ttmWeeks)) * 100;
+      const trainingDelta = (1 - (trainingProjected/training)) * 100;
+      const sppDelta = (1 - (sppProjected/spp)) * 100;
+
+      const kpis = [
+        { label:"Active Partners", current: fmtInt(partners), projected: fmtInt(partnersProjected), delta: `+${partnersDelta.toFixed(0)}%` },
+        { label:"Time to Market", current: fmtWeeks(ttmWeeks), projected: fmtWeeks(ttmProjected), delta: `-${ttmDelta.toFixed(0)}%` },
+        { label:"Training Cost / User", current: fmtMoney(training), projected: fmtMoney(trainingProjected), delta: `-${trainingDelta.toFixed(0)}%` },
+        { label:"Enablement Staff : Partners", current: ratioToString(spp), projected: ratioToString(sppProjected), delta: `-${sppDelta.toFixed(0)}%` }
+      ];
+
+      $("kpis").innerHTML = kpis.map(k => `
+        <div class="kpi">
+          <h3>${k.label}</h3>
+          <div class="pair">
+            <div><div class="muted">Current</div><div class="num">${k.current}</div></div>
+            <div class="vs">→</div>
+            <div><div class="muted">With TIDWIT</div><div class="num">${k.projected}</div></div>
+          </div>
+          <div class="delta">${k.delta}</div>
+        </div>
+      `).join("");
+
+      $("explain").innerHTML = `Projections apply your inputs using TIDWIT efficiencies.`;
+    }
+
+    ["partners","ttm","tcpu","ratio"].forEach(id => $(id).addEventListener("change", calculate));
+    $("calcBtn").addEventListener("click", calculate);
+    $("resetBtn").addEventListener("click", () => {
+      ["partners","ttm","tcpu","ratio"].forEach(id => $(id).value = "");
+      $("kpis").innerHTML = "";
+      $("explain").innerHTML = 'Enter your current metrics and click <b>Calculate Impact</b> to see projections.';
+    });
+  </script>
+</body>
+</html>
