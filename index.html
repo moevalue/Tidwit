@@ -1,195 +1,167 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>TIDWIT | Ecosystem Value</title>
-  <style>
-    :root{
-      --brand-bg: #0a1220;
-      --brand-card: #111a2b;
-      --brand-accent: #2aa2ff;
-      --brand-accent-2:#44e2a6;
-      --brand-text: #eef4ff;
-      --brand-muted: #97a9cc;
-      --brand-danger:#ff5a5f;
-      --radius: 12px;
-      --shadow: 0 6px 16px rgba(0,0,0,.25);
-    }
-    html,body{margin:0;background:linear-gradient(180deg,var(--brand-bg),#0d1830 40%, var(--brand-bg));color:var(--brand-text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
-    .wrap{max-width:1080px;margin:24px auto;padding:16px}
-    header{display:flex;align-items:center;gap:14px;margin-bottom:18px}
-    /* remove gap if no logo present */
-    header h1{font-size:1.15rem;margin:0;color:var(--brand-muted);font-weight:700;letter-spacing:.2px}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-    @media (max-width:900px){.grid{grid-template-columns:1fr}}
-    .card{background:var(--brand-card);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);box-shadow:var(--shadow)}
-    .card .pad{padding:18px}
-    .title{display:flex;align-items:center;justify-content:space-between;margin:0 0 8px}
-    .title span{font-size:.85rem;color:var(--brand-muted)}
-    .muted{color:var(--brand-muted);font-size:.8rem}
-    .inputs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
-    @media (max-width:700px){.inputs{grid-template-columns:1fr}}
-    label{display:block;font-size:.8rem;margin:0 0 3px;color:var(--brand-muted)}
-    /* Smaller/narrower input boxes */
-    input,select{
-      width:70%;
-      max-width:200px;
-      display:block;
-      margin:0;
-      padding:6px 8px;
-      border-radius:6px;
-      border:1px solid rgba(255,255,255,.08);
-      background:#0c1628;color:var(--brand-text);
-      outline:none;font-size:.85rem
-    }
-    /* On mobile, allow full width for usability */
-    @media (max-width:700px){
-      input,select{width:100%;max-width:100%;}
-    }
-    input:focus{border-color:var(--brand-accent);box-shadow:0 0 0 1px rgba(58,160,255,.15)}
-    .cta{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
-    .btn{background:linear-gradient(135deg,var(--brand-accent),#66c4ff);color:#06101f;border:none;padding:8px 10px;border-radius:6px;font-weight:700;cursor:pointer;font-size:.85rem}
-    .btn.secondary{background:#0c1628;color:var(--brand-text);border:1px solid rgba(255,255,255,.12)}
-    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
-    @media (max-width:1000px){.kpis{grid-template-columns:repeat(2,1fr)}}
-    .kpi{background:#0c1628;border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:8px}
-    .kpi h3{margin:0;font-size:.75rem;color:var(--brand-muted);font-weight:700}
-    .kpi .num{font-size:1.1rem;margin-top:3px;font-weight:800}
-    .delta{margin-top:3px;font-size:.7rem}
-    .delta.good{color:var(--brand-accent-2)}
-    .pair{display:grid;grid-template-columns:1fr auto 1fr;gap:3px;align-items:center}
-    .vs{color:var(--brand-muted);font-size:.7rem}
-    .hr{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);margin:8px 0}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIDWIT Ecosystem Value Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <!-- logo removed -->
-      <h1>TIDWIT Ecosystem Value Calculator</h1>
-    </header>
+    <div class="container">
+        <div class="calculator-card">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-content">
+                    <div class="brand-and-title">
+                        <div class="brand-section">
+                            <svg class="tidwit-logo" width="48" height="48" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- TIDWIT's actual logo pattern - interconnected network nodes -->
+                                <g transform="translate(10,10)">
+                                    <!-- Outer ring of nodes -->
+                                    <circle cx="40" cy="10" r="3" fill="#4A9EFF"/>
+                                    <circle cx="65" cy="20" r="3" fill="#4A9EFF"/>
+                                    <circle cx="75" cy="45" r="3" fill="#4A9EFF"/>
+                                    <circle cx="65" cy="70" r="3" fill="#4A9EFF"/>
+                                    <circle cx="40" cy="80" r="3" fill="#4A9EFF"/>
+                                    <circle cx="15" cy="70" r="3" fill="#4A9EFF"/>
+                                    <circle cx="5" cy="45" r="3" fill="#4A9EFF"/>
+                                    <circle cx="15" cy="20" r="3" fill="#4A9EFF"/>
+                                    
+                                    <!-- Inner nodes -->
+                                    <circle cx="40" cy="30" r="2.5" fill="#4A9EFF"/>
+                                    <circle cx="55" cy="40" r="2.5" fill="#4A9EFF"/>
+                                    <circle cx="40" cy="60" r="2.5" fill="#4A9EFF"/>
+                                    <circle cx="25" cy="40" r="2.5" fill="#4A9EFF"/>
+                                    
+                                    <!-- Center node -->
+                                    <circle cx="40" cy="45" r="4" fill="#4A9EFF"/>
+                                    
+                                    <!-- Connection lines -->
+                                    <path d="M40,10 L65,20 L75,45 L65,70 L40,80 L15,70 L5,45 L15,20 Z" stroke="#4A9EFF" stroke-width="1.5" fill="none" opacity="0.6"/>
+                                    <path d="M40,30 L55,40 L40,60 L25,40 Z" stroke="#4A9EFF" stroke-width="1.5" fill="none" opacity="0.6"/>
+                                    <path d="M40,30 L40,45 M55,40 L40,45 M40,60 L40,45 M25,40 L40,45" stroke="#4A9EFF" stroke-width="1.5" opacity="0.8"/>
+                                    <path d="M40,10 L40,30 M65,20 L55,40 M75,45 L55,40 M65,70 L40,60 M40,80 L40,60 M15,70 L25,40 M5,45 L25,40 M15,20 L40,30" stroke="#4A9EFF" stroke-width="1" opacity="0.5"/>
+                                </g>
+                            </svg>
+                            <span class="brand-name">TIDWIT</span>
+                        </div>
+                        <h1>Ecosystem Value Calculator</h1>
+                    </div>
+                    <button class="close-btn" onclick="resetCalculator()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
 
-    <div class="grid">
-      <section class="card">
-        <div class="pad">
-          <div class="title">
-            <h2 style="margin:0;font-size:.95rem">Tell us about your current state</h2>
-            <span>All fields required</span>
-          </div>
+            <!-- Input Form Section -->
+            <div class="form-section">
+                <div class="section-header">
+                    <h2>Tell us about your current state</h2>
+                    <span class="required-note">All fields required</span>
+                </div>
 
-          <div class="inputs">
-            <div>
-              <label for="partners">Active partners (count)</label>
-              <input id="partners" type="number" placeholder="e.g., 50" required>
-            </div>
-            <div>
-              <label for="ttm">Time to market (in weeks)</label>
-              <input id="ttm" type="number" placeholder="e.g., 12" required>
-            </div>
-            <div>
-              <label for="tcpu">Engagement cost per user (USD)</label>
-              <input id="tcpu" type="number" placeholder="e.g., 250" required>
-            </div>
-            <div>
-              <label for="ratio">Enablement staff-to-partners ratio</label>
-              <input id="ratio" type="text" placeholder="e.g., 1:10 or 0.1" required>
-            </div>
-          </div>
+                <form id="calculatorForm">
+                    <div class="input-group">
+                        <label for="activePartners">Active partners (count)</label>
+                        <input 
+                            type="number" 
+                            id="activePartners" 
+                            name="activePartners" 
+                            placeholder="e.g., 50"
+                            min="1"
+                            required
+                        >
+                        <div class="error-message" id="activePartnersError"></div>
+                    </div>
 
-          <div class="cta">
-            <button class="btn" id="calcBtn" type="button">Calculate Impact</button>
-            <button class="btn secondary" id="resetBtn" type="button">Reset</button>
-          </div>
+                    <div class="input-group">
+                        <label for="timeToMarket">Time to market (in weeks)</label>
+                        <input 
+                            type="number" 
+                            id="timeToMarket" 
+                            name="timeToMarket" 
+                            placeholder="e.g., 12"
+                            min="1"
+                            required
+                        >
+                        <div class="error-message" id="timeToMarketError"></div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="engagementCost">Engagement cost per user (USD)</label>
+                        <input 
+                            type="number" 
+                            id="engagementCost" 
+                            name="engagementCost" 
+                            placeholder="e.g., 250"
+                            min="0"
+                            step="0.01"
+                            required
+                        >
+                        <div class="error-message" id="engagementCostError"></div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="staffRatio">Enablement staff-to-partners ratio</label>
+                        <input 
+                            type="number" 
+                            id="staffRatio" 
+                            name="staffRatio" 
+                            placeholder="e.g., 1:10 or 0.1"
+                            min="0"
+                            step="0.01"
+                            required
+                        >
+                        <div class="error-message" id="staffRatioError"></div>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="submit" class="calculate-btn">
+                            <i class="fas fa-calculator"></i>
+                            Calculate Impact
+                        </button>
+                        <button type="button" class="reset-btn" onclick="resetCalculator()">
+                            Reset
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-section" id="resultsSection">
+                <div class="section-header">
+                    <h2>Your projected impact with TIDWIT</h2>
+                    <span class="preview-note">Instant preview</span>
+                </div>
+
+                <div class="results-grid" id="resultsGrid">
+                    <!-- Results will be dynamically inserted here -->
+                </div>
+
+                <div class="cta-section">
+                    <p class="cta-text">Ready to transform your partner ecosystem?</p>
+                    <button class="contact-btn">
+                        <i class="fas fa-calendar-alt"></i>
+                        Schedule a Demo
+                    </button>
+                </div>
+            </div>
+
+            <!-- Initial State Message -->
+            <div class="initial-message" id="initialMessage">
+                <div class="section-header">
+                    <h2>Your projected impact with TIDWIT</h2>
+                    <span class="preview-note">Instant preview</span>
+                </div>
+                <p class="placeholder-text">
+                    Enter your current metrics and click <strong>Calculate Impact</strong> to see projections.
+                </p>
+            </div>
         </div>
-      </section>
-
-      <section class="card">
-        <div class="pad">
-          <div class="title">
-            <h2 style="margin:0;font-size:.95rem">Your projected impact with TIDWIT</h2>
-            <span>Instant preview</span>
-          </div>
-
-          <div class="kpis" id="kpis"></div>
-          <div class="hr"></div>
-          <div id="explain" class="muted">Enter your current metrics and click <b>Calculate Impact</b> to see projections.</div>
-        </div>
-      </section>
     </div>
-  </div>
 
-  <script>
-    // removed logo JS
-    const $ = (id) => document.getElementById(id);
-    const fmtInt = (n)=> isFinite(n)? Math.round(n).toLocaleString(): "—";
-    const fmtMoney = (n)=> isFinite(n)? "$" + Number(n).toFixed(2): "—";
-    const fmtWeeks = (w)=> isFinite(w)? (w<1? (w*7).toFixed(0)+" days" : Number(w).toFixed(1)+" wks") : "—";
-
-    function parseRatio(input){
-      if(!input) return NaN;
-      if(input.includes(":")){
-        const [a,b] = input.split(":").map(Number);
-        return a/b;
-      }
-      return Number(input);
-    }
-
-    function ratioToString(spp){
-      if(!isFinite(spp) || spp<=0) return "—";
-      const denom = Math.max(1, Math.round(1 / spp));
-      return `1:${denom}`;
-    }
-
-    function calculate(){
-      const partners = Number($("partners").value);
-      const ttmWeeks = Number($("ttm").value);
-      const training = Number($("tcpu").value);
-      const spp = parseRatio($("ratio").value);
-      const ok = [partners, ttmWeeks, training, spp].every(v => isFinite(v) && v>=0);
-      if(!ok){
-        $("explain").innerHTML = "Please complete all fields with valid numbers.";
-        $("kpis").innerHTML = "";
-        return;
-      }
-      const partnersProjected = partners * 4;
-      const ttmProjected = ttmWeeks / 6;
-      const trainingProjected = training / 4;
-      const sppProjected = spp * 0.5;
-      const partnersDelta = (partnersProjected/partners - 1) * 100;
-      const ttmDelta = (1 - (ttmProjected/ttmWeeks)) * 100;
-      const trainingDelta = (1 - (trainingProjected/training)) * 100;
-      const sppDelta = (1 - (sppProjected/spp)) * 100;
-
-      const kpis = [
-        { label:"Active Partners", current: fmtInt(partners), projected: fmtInt(partnersProjected), delta: `+${partnersDelta.toFixed(0)}%` },
-        { label:"Time to Market", current: fmtWeeks(ttmWeeks), projected: fmtWeeks(ttmProjected), delta: `-${ttmDelta.toFixed(0)}%` },
-        { label:"Training Cost / User", current: fmtMoney(training), projected: fmtMoney(trainingProjected), delta: `-${trainingDelta.toFixed(0)}%` },
-        { label:"Enablement Staff : Partners", current: ratioToString(spp), projected: ratioToString(sppProjected), delta: `-${sppDelta.toFixed(0)}%` }
-      ];
-
-      $("kpis").innerHTML = kpis.map(k => `
-        <div class="kpi">
-          <h3>${k.label}</h3>
-          <div class="pair">
-            <div><div class="muted">Current</div><div class="num">${k.current}</div></div>
-            <div class="vs">→</div>
-            <div><div class="muted">With TIDWIT</div><div class="num">${k.projected}</div></div>
-          </div>
-          <div class="delta">${k.delta}</div>
-        </div>
-      `).join("");
-
-      $("explain").innerHTML = `Projections apply your inputs using TIDWIT efficiencies.`;
-    }
-
-    ["partners","ttm","tcpu","ratio"].forEach(id => $(id).addEventListener("change", calculate));
-    $("calcBtn").addEventListener("click", calculate);
-    $("resetBtn").addEventListener("click", () => {
-      ["partners","ttm","tcpu","ratio"].forEach(id => $(id).value = "");
-      $("kpis").innerHTML = "";
-      $("explain").innerHTML = 'Enter your current metrics and click <b>Calculate Impact</b> to see projections.';
-    });
-  </script>
+    <script src="script.js"></script>
 </body>
 </html>
